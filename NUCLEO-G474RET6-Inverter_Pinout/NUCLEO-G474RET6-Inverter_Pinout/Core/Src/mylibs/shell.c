@@ -8,6 +8,7 @@
 #include "mylibs/shell.h"
 #include <stdio.h>
 #include <string.h>
+#include "tim.h"
 
 uint8_t prompt[]="user@Nucleo-STM32G474RET6>>";
 uint8_t started[]=
@@ -76,6 +77,16 @@ void Shell_Loop(void){
 			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "Print all available functions here\r\n");
 			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 		}
+		else if(strcmp(argv[0],"speed")==0){
+			float speedVal=atoi(argv[1]);
+			if (speedVal> SPEED_MAX){
+				speedVal=SPEED_MAX;
+			}
+				speedVal=(DUTY_MAX*speedVal)/100; //PWM en pourcentage
+				__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,speedVal);
+				__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_2,DUTY_MAX - speedVal);
+			}
+
 		else{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
