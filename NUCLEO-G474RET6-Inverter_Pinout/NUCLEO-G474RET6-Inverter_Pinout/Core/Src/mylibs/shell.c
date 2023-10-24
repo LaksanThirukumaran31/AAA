@@ -8,6 +8,12 @@
 #include "mylibs/shell.h"
 #include <stdio.h>
 #include <string.h>
+#include "tim.h"
+#include "adc.h"
+
+#define PWM_MAX 100
+#define DUTY_MAX 4250
+#define PWM_MIN 0
 
 uint8_t prompt[]="user@Nucleo-STM32G474RET6>>";
 uint8_t started[]=
@@ -76,6 +82,58 @@ void Shell_Loop(void){
 			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "Print all available functions here\r\n");
 			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 		}
+		else if(strcmp(argv[0],"speed")==0){
+			float speedVal=atoi(argv[1]);
+			if (speedVal> PWM_MAX){
+				speedVal=PWM_MAX;
+			}
+			if (speedVal< PWM_MIN){
+				speedVal=PWM_MIN;
+			}
+
+			speedVal=(DUTY_MAX*speedVal)/100; //PWM en pourcentage
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,speedVal);
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_2,DUTY_MAX - speedVal);
+
+		}
+		/*
+		 * start -> Activation des PWM avec un rapport cyclique de 50%
+		 * stop  -> Désactivation des PWM
+		 * adc   -> On affiche la mesure du courant
+		 */
+		else if(strcmp(argv[0],"start")==0){
+
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,0.5*DUTY_MAX);
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_2,0.5*DUTY_MAX);
+			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+
+		}
+		else if(strcmp(argv[0],"stop")==0){
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+
+			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+		}
+		else if(strcmp(argv[0],"adc")==0){
+
+			HAL_ADC_Start(&hadc1);
+			//HAL_ADC_PollForConversion(&hadc1,HAL_MAX_DELAY);
+			uint16_t val;
+			val= HAL_ADC_GetValue(&hadc1);
+			float u_V,I_mes ;
+			u_V = (val/4096.0)*3.3;
+			I_mes = (u_V-1.65)/0.05;
+			char buff[30];
+			sprintf(buff, "Courant : %f A\r\n", I_mes);
+			HAL_UART_Transmit(&huart2,(uint8_t*)buff,strlen(buff),HAL_MAX_DELAY);
+
+		}
+
+
 		else{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
