@@ -74,3 +74,47 @@ On fixe le rapport cyclique à 0 ou à 100 si la valeur après speed est inféri
 
 Nous avons réalisé des test pour vérifier le bon fonctionnement de la commande speed. 
 On augmente la vitesse de 10 en 10. 
+
+
+
+# PARTIE 2 : COMMANDE EN BO, MESURE DE COURANT ET DE VITESSE 
+
+Dans cette partie , on veut faire la commande en Bo du moteur avec une accélération limitée, puis faire la mesure du courant aux endroits adéquat dans le montage et de mesurer la vitesse à partir du codeurs présent sur chaque moteur. 
+
+# Commande de la vitesse 
+On veut rajouter quelque fonctionnalités pour controler la vitesse : 
+- Commande "start" : permet de fixer le rapport cyclique à 50% et activer les 4 PWM 
+- Commande  "stop" : permet de désactiver les timers 
+Pour réaliser ses commandes, on va continuer à modifier le fichier shell.c :
+
+```c
+		/*
+		 * start -> Activation des PWM avec un rapport cyclique de 50%
+		 * stop  -> Désactivation des PWM
+		 */
+		else if(strcmp(argv[0],"start")==0){
+
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,0.5*DUTY_MAX);
+			__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_2,0.5*DUTY_MAX);
+			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+
+		}
+		else if(strcmp(argv[0],"stop")==0){
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+
+			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+		}
+
+
+// On utilise les fonctions suivantes pour activer les PWM :
+// HAL_TIM_PWM_Start et  HAL_TIMEx_PWMN_Start 
+//  HAL_TIM_PWM_Stop et HAL_TIMEx_PWMN_Stop pour les désactiver.
+ 
+```
+
+
