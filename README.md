@@ -117,4 +117,30 @@ Pour réaliser ses commandes, on va continuer à modifier le fichier shell.c :
  
 ```
 
+# Mesure du courant 
+
+On mesure le courant de U (U_Imes: pin PA1 -> ADC CHANNEL 1)
+Avec la datasheet du ..., on a remarqué qu'il y a un offset de 1.65V. 
+On fais la converion suivante pour avoir la valeur du courant et on convertit la valeur de l' ADC pour avoir le courant mesuré 
+
+```c
+		else if(strcmp(argv[0],"adc")==0){
+			// METHODE POOLING 
+			// ADCP -> ADC POOLING 
+			HAL_ADC_Start(&hadc1);
+			uint16_t val_ADCP;
+			val_ADCP= HAL_ADC_GetValue(&hadc1);
+			float us_ADC,I_mes ;
+			us_ADC = (val_ADCP/4096.0)*3.3;
+			I_mes = (us_ADC-1.65)/0.05;
+			char buff[30];
+			sprintf(buff, "Courant : %f A\r\n", I_mes);
+			HAL_UART_Transmit(&huart2,(uint8_t*)buff,strlen(buff),HAL_MAX_DELAY);
+		/*
+		 * Nouvelle commande shell "adc" qui permet de mesurer le courant en pooling 
+		 * val_ADCP est la valeur qu'on récupère de l'ADC
+		 * I_mes -> Variable qui correspond à la valeur du courant
+		 * 
+		 */
+```
 
