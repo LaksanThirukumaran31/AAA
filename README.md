@@ -119,6 +119,7 @@ Pour réaliser ses commandes, on va continuer à modifier le fichier shell.c :
 
 # Mesure du courant 
 
+
 On mesure le courant de U (U_Imes: pin PA1 -> ADC CHANNEL 1)
 Avec la datasheet du ..., on a remarqué qu'il y a un offset de 1.65V. 
 On fais la converion suivante pour avoir la valeur du courant et on convertit la valeur de l' ADC pour avoir le courant mesuré 
