@@ -5,7 +5,7 @@
 # OBJECTIF 
 
 L'objectif de ce TP est de pouvoir réaliser l' asservissement en vitesse et en courant d'un moteur. Ce TP est réparti en 3 parties : 
-I. La commande d'une MCC <br>  
+I. La commande d'une MCC  
 II. La commande en boucle ouverte et mesure du courant et de la vitesse <br>
 III. Asservissement <br>
 
