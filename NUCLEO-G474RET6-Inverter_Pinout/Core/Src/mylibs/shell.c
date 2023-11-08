@@ -2,7 +2,7 @@
  * shell.c
  *
  *  Created on: Oct 1, 2023
- *      Author: nicolas
+ *      Author: Laksan Thirukumaran & Clément DU
  */
 #include "usart.h"
 #include "mylibs/shell.h"
@@ -17,6 +17,9 @@
 #define PWM_MAX 100
 #define DUTY_MAX 4250
 #define PWM_MIN 0
+#define OFFSET 1.65
+#define VOLTAGE 3.3
+#define NOMINAL_SENSITIVE 0.05
 
 uint8_t prompt[]="user@Nucleo-STM32G474RET6>>";
 uint8_t started[]=
@@ -31,6 +34,10 @@ uint8_t brian[]="Brian is in the kitchen\r\n";
 uint8_t uartRxReceived;
 uint8_t uartRxBuffer[UART_RX_BUFFER_SIZE];
 uint8_t uartTxBuffer[UART_TX_BUFFER_SIZE];
+uint16_t valueADC;
+
+float vs_adc;
+float valueCurrent;
 
 char adc[CMD_BUFFER_SIZE];
 char adc_dma[CMD_BUFFER_SIZE];
@@ -48,7 +55,6 @@ void Shell_Init(void){
 	memset(cmdBuffer, NULL, CMD_BUFFER_SIZE*sizeof(char));
 	memset(uartRxBuffer, NULL, UART_RX_BUFFER_SIZE*sizeof(char));
 	memset(uartTxBuffer, NULL, UART_TX_BUFFER_SIZE*sizeof(char));
-
 	HAL_UART_Receive_IT(&huart2, uartRxBuffer, UART_RX_BUFFER_SIZE);
 	HAL_UART_Transmit(&huart2, started, strlen((char *)started), HAL_MAX_DELAY);
 	HAL_UART_Transmit(&huart2, prompt, strlen((char *)prompt), HAL_MAX_DELAY);
@@ -138,18 +144,18 @@ void Shell_Loop(void){
 		 * valueCurrent -> Variable qui correspond à la valeur du courant
 		 */
 		else if(strcmp(argv[0],"adc")==0){
+
 			HAL_ADC_Start(&hadc1);
-			uint16_t valueADC;
 			valueADC= HAL_ADC_GetValue(&hadc1);
-			float us_ADC, valueCurrent ;
-			us_ADC = (valueADC/4096.0)*3.3;
-			valueCurrent = (us_ADC-1.65)/0.05;
+			vs_adc = (valueADC/4096.0)*VOLTAGE;
+			valueCurrent = (vs_adc-OFFSET)/NOMINAL_SENSITIVE;
+
 			sprintf(adc, "Courant : %f A\r\n", valueCurrent);
 			HAL_UART_Transmit(&huart2,(uint8_t*)adc,strlen(adc),HAL_MAX_DELAY);
 		}
 		else if(strcmp(argv[0],"adc_dma")==0){
 
-			sprintf(adc_dma, "Courant : %f A\r\n", Imesf);
+			sprintf(adc_dma, "Courant : %f A\r\n",Imesf);
 			HAL_UART_Transmit(&huart2,(uint8_t*)adc_dma,strlen(adc_dma),HAL_MAX_DELAY);
 		}
 		else if(strcmp(argv[0],"encoder")==0){

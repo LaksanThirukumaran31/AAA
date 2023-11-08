@@ -136,18 +136,65 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 		 * valueADC est la valeur qu'on récupère de l'ADC
 		 * valueCurrent -> Variable qui correspond à la valeur du courant
 		 */
+
+		uint16_t valueADC;
+		float vs_adc;
+		float valueCurrent;
+
 		else if(strcmp(argv[0],"adc")==0){
+
 			HAL_ADC_Start(&hadc1);
-			uint16_t valueADC;
 			valueADC= HAL_ADC_GetValue(&hadc1);
-			float us_ADC, valueCurrent ;
-			us_ADC = (valueADC/4096.0)*3.3;
-			valueCurrent = (us_ADC-1.65)/0.05;
+			vs_adc = (valueADC/4096.0)*VOLTAGE;
+			valueCurrent = (vs_adc-OFFSET)/NOMINAL_SENSITIVE;
+
 			sprintf(adc, "Courant : %f A\r\n", valueCurrent);
 			HAL_UART_Transmit(&huart2,(uint8_t*)adc,strlen(adc),HAL_MAX_DELAY);
 		}
 ```
 #### Conversion et mesure par DMA 
+
+Nous réalisons  la  mesure du courant en utilisant le DMA. Pour cela il il y a plusieurs configuration à faire : <br>
+1. Configurer le timer  <br>
+2. Configuer l'ADC  et du DMA<br>
+3. Coder la conversion dans le callback de l'ADC <br>
+4. Configurer une commande "adc_dma" sur le shell <br>
+
+Nous avons choisit le mode "Update Envent" dans la partie Trigger Output du timer 1. Ce mode permet au timer de générer des déclenchements à intervalles réguliers. Nous utilisons ses déclenchements pour lancer la conversion. 
+
+Pour l'ADC, Dans la partie "ADC_Regular_ConversionMode", nous avons choisit le mode Timer 1 Trigger Out event pour " External Trigger Conversion Source". Ce mode permet de lancer la conversion à chaque déclenchement du timer 1.  Nous activons  aussi l'interruption de l'ADC pour faire la conversion de la valeur en sorite de l'ADC. <br>
+Pour le DMA, nous avons fixer une requête DMA du chanel 2 de l'ADC vers la mémoire. 
+
+Puis nous réalisons la conversion dans le Callback  : "HAL_ADC_ConvCpltCallback"
+
+```c
+
+	#define VOLTAGE 3.3
+	#define OFFSET 1.65
+	#define NOMINAL_SENSITIVE 0.05
+
+	float vout_ADC;
+	uint16_t val_DMA = ADC_Buffer[0];
+	vout_ADC = (val_DMA/ 4096.0) * VOLTAGE;
+	Imesf =(vout_ADC - OFFSET) / NOMINAL_SENSITIVE;
+	/*
+	 * Conversion PAR DMA
+	 * 4096 -> 12 bits de résolution pour l'ADC
+	 * Imesf -> La varibale qui contient le courant pour la methode ADC/TIM/DMA
+	 */
+
+
+Pour utiliser la conversion en utilisant le dma, nous avons configuré une commande "adc_dma": 
+
+```c
+else if(strcmp(argv[0],"adc_dma")==0){
+	sprintf(adc_dma, "Courant : %f A\r\n",Imesf);
+	HAL_UART_Transmit(&huart2,(uint8_t*)adc_dma,strlen(adc_dma),HAL_MAX_DELAY);
+		}
+```
+
+
+
 ### 3. Mesure de la vitesse 
 > Commande ```encoder``` réalisée durant les vacances, marchera t-elle ?  
 #
@@ -156,7 +203,7 @@ __Choix du timer 4 en mode :__ <br>
 - Combined Channel -> Encoder Mode <br>
 
 Pour calculer la vitesse, nous faisons le choix d'activer l'interruption du timer 5 toutes les 10 ms.
-Nous récupérons la valeur du compteur de l'encodeur (timer 4), celui-ci est multiplié par 100 Hz (d'où les 10 ms) puis divisé par la résolution de l'encodeur : 4096 (12 bits).
+Nous récupérons la vaeur du compteur de l'encodeur (timer 4), celui-ci est multiplié par 100 Hz (d'où les 10 ms) puis divisé par la résolution de l'encodeur : 4096 (12 bits).
 
 ```c
 void TIM5_IRQHandler(void)
