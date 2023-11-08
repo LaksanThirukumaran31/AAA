@@ -33,7 +33,7 @@ Pour obtenir une fréquence de 20 kHz tout en respectant la résolution et le ra
 
 #### PWM complémentaires en décalage
 Pour obtenir les signaux PWM complémentaires en décalage, nous reconfigurons les réglages. <br> 
-- **```Counteur Mode```** : **Center Aligned**, par conséquent <br>
+- **Counteur Mode** : **Center Aligned**, par conséquent <br>
 l'**ARR** est divisé par deux : **4250** <br>
 - **CCR1** = **2550** <br>
 - **CCR2** = ARR-CCR1 = 4250-2550 = **1700** <br>
@@ -174,7 +174,7 @@ void TIM5_IRQHandler(void)
 ## III. L'asservissement
 Nous n'avons pas réalisé l'asservissement
 ## Remarques
-Nous n'avons pas réalisé de Doxygen, nous n'avons pas spécialement écrit des fonctions, l'essentiel est dans la Shell_Loop. Il y a un callback et un appel d'interruption.
+Nous n'avons pas réalisé de Doxygen, nous n'avons pas spécialement écrit des fonctions, l'essentiel est dans la Shell_Loop. <br> Il y a un callback et un appel d'interruption.
 ## Auteurs
-Clément DU
+Clément DU <br>
 Laksan THIRUKUMARAN
