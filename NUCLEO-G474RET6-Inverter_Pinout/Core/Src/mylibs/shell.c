@@ -32,6 +32,9 @@ uint8_t uartRxReceived;
 uint8_t uartRxBuffer[UART_RX_BUFFER_SIZE];
 uint8_t uartTxBuffer[UART_TX_BUFFER_SIZE];
 
+char adc[CMD_BUFFER_SIZE];
+char adc_dma[CMD_BUFFER_SIZE];
+char encoder[CMD_BUFFER_SIZE];
 char	 	cmdBuffer[CMD_BUFFER_SIZE];
 int 		idx_cmd;
 char* 		argv[MAX_ARGS];
@@ -39,6 +42,7 @@ int		 	argc = 0;
 char*		token;
 int 		newCmdReady = 0;
 extern float Imesf;
+extern float encoder_speed;
 void Shell_Init(void){
 	memset(argv, NULL, MAX_ARGS*sizeof(char*));
 	memset(cmdBuffer, NULL, CMD_BUFFER_SIZE*sizeof(char));
@@ -82,7 +86,13 @@ void Shell_Loop(void){
 			HAL_UART_Transmit(&huart2, brian, sizeof(brian), HAL_MAX_DELAY);
 		}
 		else if(strcmp(argv[0],"help")==0){
-			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "Print all available functions here\r\n");
+			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE,
+					"speed"
+					"\r\n start"
+					"\r\n stop"
+					"\r\n adc"
+					"\r\n adc_dma"
+					"\r\n encoder");
 			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 		}
 		else if(strcmp(argv[0],"speed")==0){
@@ -112,40 +122,44 @@ void Shell_Loop(void){
 			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+			HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
 
 		}
 		else if(strcmp(argv[0],"stop")==0){
 			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
 			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
 			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
-
 			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
 		}
+		/*
+		 * Nouvelle commande shell "adc" qui permet de mesurer le courant en pooling
+		 * valueADC est la valeur qu'on récupère de l'ADC
+		 * I_mes -> Variable qui correspond à la valeur du courant
+		 *
+		 */
 		else if(strcmp(argv[0],"adc")==0){
 			// METHODE POOLING
 			// ADCP -> ADC POOLING
 			HAL_ADC_Start(&hadc1);
-			uint16_t val_ADCP;
-			val_ADCP= HAL_ADC_GetValue(&hadc1);
-			float us_ADC,I_mes ;
-			us_ADC = (val_ADCP/4096.0)*3.3;
-			I_mes = (us_ADC-1.65)/0.05;
-			char buff[30];
-			sprintf(buff, "Courant : %f A\r\n", I_mes);
-			HAL_UART_Transmit(&huart2,(uint8_t*)buff,strlen(buff),HAL_MAX_DELAY);
-		/*
-		 * Nouvelle commande shell "adc" qui permet de mesurer le courant en pooling
-		 * val_ADCP est la valeur qu'on récupère de l'ADC
-		 * I_mes -> Variable qui correspond à la valeur du courant
-		 *
-		 */
-
+			uint16_t valueADC;
+			valueADC= HAL_ADC_GetValue(&hadc1);
+			float us_ADC, valueCurrent ;
+			us_ADC = (valueADC/4096.0)*3.3;
+			valueCurrent = (us_ADC-1.65)/0.05;
+			sprintf(adc, "Courant : %f A\r\n", valueCurrent);
+			HAL_UART_Transmit(&huart2,(uint8_t*)adc,strlen(adc),HAL_MAX_DELAY);
 		}
 		else if(strcmp(argv[0],"adc_dma")==0){
-			char buffdma[30];
-			sprintf(buffdma, "Courant : %f A\r\n", Imesf);
-			HAL_UART_Transmit(&huart2,(uint8_t*)buffdma,strlen(buffdma),HAL_MAX_DELAY);
+
+			sprintf(adc_dma, "Courant : %f A\r\n", Imesf);
+			HAL_UART_Transmit(&huart2,(uint8_t*)adc_dma,strlen(adc_dma),HAL_MAX_DELAY);
 		}
+		else if(strcmp(argv[0],"encoder")==0){
+
+			sprintf(encoder, "Vitesse : %f tr/s\r\n", encoder_speed);
+			HAL_UART_Transmit(&huart2,(uint8_t*)encoder,strlen(encoder),HAL_MAX_DELAY);
+		}
+
 		else{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
