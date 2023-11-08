@@ -8,7 +8,7 @@ III. L'asservissement de ces derniers <br>
 Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant certaines contraintes. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis et nous réalisons un premier essai de commande de moteur. 
 
 ### 1. Génération de 4 signaux PWM 
-#### PWM complémentaires
+####### PWM complémentaires
 __Contraintes :__
 **Fréquence des PWM : 20kHz** <br> 
 **Rapport cyclique : 60%** <br>
