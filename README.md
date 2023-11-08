@@ -1,17 +1,13 @@
 # TP Actionneur_Automatique_Applique
+
 ## OBJECTIF 
 L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur.<br> Ce TP se compose en 3 parties : <br>
 I. La commande de la MCC  <br>
 II. La commande en boucle ouverte et mesure du courant et de la vitesse <br>
 III. L'asservissement de ces derniers <br>
+
 ## I. La commande de la MCC 
 Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant certaines contraintes. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis et nous réalisons un premier essai de commande de moteur. 
-
-
-
-
-
-
 
 ### 1. Génération de 4 signaux PWM 
 #### PWM complémentaires
@@ -30,6 +26,7 @@ Pour obtenir une fréquence de 20 kHz tout en respectant la résolution et le ra
 - **ARR** : **8500** => 20 kHz <br>
 - **CCR1** ou PWM CH1-CH1N Pulse : = 0.6*ARR = **4950** <br>
 - **CCR2** ou PWM CH2-CH2N Pulse : **4950** <br>
+
 #### Visualisation des PWM complémentaires
 
 #### PWM complémentaires en décalage
@@ -38,7 +35,9 @@ Pour obtenir les signaux PWM complémentaires en décalage, nous reconfigurons l
 l'**ARR** est divisé par deux : **4250** <br>
 - **CCR1** = **2550** <br>
 - **CCR2** = ARR-CCR1 = 4250-2550 = **1700** <br>
+
 #### Visualisation des PWM complémentaires en décalage
+
 ### Temps morts
 Selon la datasheet du transistor, le Rise Time et le Fall Time sont à 35 ns, soient des temps morts à 70 ns. <br>
 Pour être large, nous prenons des temps morts à 200 ns.
@@ -48,7 +47,9 @@ tDTS = 1/(170*10^6) = 5.88 ns
 DTFG vaut environ 34 est inférieur à 2^7-1 = 127, donc c'est accepté, nous n'avons pas besoin de tester les suivantes
 ```
 Nous rentrons la valeur 34 comme Dead Time dans la zone appropriée.
+
 #### Visualisation des temps morts
+
 ### 2. Commande de la vitesse 
 Nous contrôlons la vitesse en envoyant une séquence via la liaison UART de la forme : speed XX où XX est un nombre en pourcentage, par exemple speed 60 correspond à un rapport cyclique de 60%. <br>
 Dans le fichier shell.c, nous rajoutons la commande "speed" :
@@ -75,17 +76,12 @@ else if(strcmp(argv[0],"speed")==0){
 Nous fixons le rapport cyclique à 0 ou à 100 :
 - 0, si le nombre est négatif
 - 100, si le nombre est supérieur à 100
-
-
+- 
 ### 3. Premiers tests
-
 Nous avons réalisé des tests pour vérifier le bon fonctionnement de la commande speed. 
 Nous varions la vitesse de 10% en 10% pour éviter les forts appels de courant.
 
-
-
 ## II. La commande en boucle ouverte et mesure du courant et de la vitesse
-
 Dans cette partie , on veut faire la commande en Bo du moteur avec une accélération limitée, puis faire la mesure du courant aux endroits adéquat dans le montage et de mesurer la vitesse à partir du codeurs présent sur chaque moteur. 
 
 ### 1.Commande de la vitesse 
@@ -120,9 +116,7 @@ Ajout des commandes dans le fichier shell.c :
 ```
 
 ### 2. Mesure du courant 
-
 #### Conversion et mesure par pooling
-
 Nous mesurons le courant de U (U_Imes: pin PA1 -> ADC CHANNEL 1)
 Avec la datasheet du capteur du courant, son offset de 1.65V. 
 Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous convertissons la valeur de l'ADC pour ainsi obtenir la valeur du courant.
@@ -146,7 +140,6 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 ```
 #### Conversion et mesure par DMA
 ### 3. Mesure de la vitesse (réalisé durant les vacances, marchera t-il ?)
-
 Pour la vitesse, nous nous plaçons en mode encodeur
 __Choix du timer 4 en mode :__ <br>
 Combined Channel -> Encoder Mode <br>
