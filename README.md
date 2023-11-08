@@ -1,19 +1,25 @@
 # TP Actionneur_Automatique_Applique
 ## OBJECTIF 
-L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur.<br> Ce TP se compose en 3 parties : 
-I. La commande de la MCC  
+L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur.<br> Ce TP se compose en 3 parties : <br>
+I. La commande de la MCC  <br>
 II. La commande en boucle ouverte et mesure du courant et de la vitesse <br>
 III. L'asservissement de ces derniers <br>
 ## I. La commande de la MCC 
 Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant certaines contraintes. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis et nous réalisons un premier essai de commande de moteur. 
 
+
+
+
+
+
+
 ### 1. Génération de 4 signaux PWM 
-####### PWM complémentaires
+#### PWM complémentaires
 __Contraintes :__
 **Fréquence des PWM : 20kHz** <br> 
 **Rapport cyclique : 60%** <br>
 **Résolution de 10 bits**
-**Temps morts** cf. [2. Temps morts](#temps-morts)
+**Temps morts** : voir [Temps morts](#temps-morts)
 
 __Choix du timer 1 en mode :__ <br>
 - Channel 1 -> PWM Generation CH1 CH1N <br>
@@ -27,32 +33,28 @@ Pour obtenir une fréquence de 20 kHz tout en respectant la résolution et le ra
 #### Visualisation des PWM complémentaires
 
 #### PWM complémentaires en décalage
-
 Pour obtenir les signaux PWM complémentaires en décalage, nous reconfigurons les réglages. <br> 
 - **Counteur Mode** : **Center Aligned**, par conséquent <br>
 l'**ARR** est divisé par deux : **4250** <br>
 - **CCR1** = **2550** <br>
-- **CCR2** = ARR-CCR1=4250-2550=**1700** <br>
+- **CCR2** = ARR-CCR1 = 4250-2550 = **1700** <br>
 #### Visualisation des PWM complémentaires en décalage
-## 2. Temps morts
-
+### Temps morts
 Selon la datasheet du transistor, le Rise Time et le Fall Time sont à 35 ns, soient des temps morts à 70 ns. <br>
-Pour être large, nous prenons de temps morts à 200 ns.
+Pour être large, nous prenons des temps morts à 200 ns.
 ```
-Formule : DTF=DTFG[6:0]xtDTS
 DTF = 200 ns
 tDTS = 1/(170*10^6) = 5.88 ns
-DTFG vaut environ 34 est inférieur à 2^7-1 = 127, donc c'est accepté
+DTFG vaut environ 34 est inférieur à 2^7-1 = 127, donc c'est accepté, nous n'avons pas besoin de tester les suivantes
 ```
-Nous rentrons la valeur 34 dans Dead Time dans la zone appropriée.
+Nous rentrons la valeur 34 comme Dead Time dans la zone appropriée.
 #### Visualisation des temps morts
-### 3. Commande de la vitesse 
-Nous contrôlons la vitesse en envoyant une séquence via la liaison UART de la forme : speed XX où XX est un nombre en pourcentage, par exemple speed 60 (60%). <br>
+### 2. Commande de la vitesse 
+Nous contrôlons la vitesse en envoyant une séquence via la liaison UART de la forme : speed XX où XX est un nombre en pourcentage, par exemple speed 60 correspond à un rapport cyclique de 60%. <br>
 Dans le fichier shell.c, nous rajoutons la commande "speed" :
-
 ```c
 #define PWM_MAX 100
-#define PWM_MIN   0
+#define PWM_MIN 0
 
 else if(strcmp(argv[0],"speed")==0){
 			float speedVal=atoi(argv[1]);
@@ -70,10 +72,12 @@ else if(strcmp(argv[0],"speed")==0){
 		}
 
 ```
-Nous fixons le rapport cyclique à 0 ou à 100 si la valeur n'est pas comprise entre ces deux valeurs.
+Nous fixons le rapport cyclique à 0 ou à 100 :
+- 0, si le nombre est négatif
+- 100, si le nombre est supérieur à 100
 
 
-### 4. Premiers tests
+### 3. Premiers tests
 
 Nous avons réalisé des tests pour vérifier le bon fonctionnement de la commande speed. 
 Nous varions la vitesse de 10% en 10% pour éviter les forts appels de courant.
