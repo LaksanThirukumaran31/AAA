@@ -14,7 +14,7 @@ Dans cette première partie, nous générons 4 PWM en complémentaire décalée 
 __Contraintes :__ <br>
 **Fréquence des PWM : 20kHz** <br> 
 **Rapport cyclique : 60%** <br>
-**Résolution de 10 bits**
+**Résolution de 10 bits** <br>
 **Temps morts** : [Temps morts](#temps-morts)
 
 __Choix du timer 1 en mode :__ <br>
