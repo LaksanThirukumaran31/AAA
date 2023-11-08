@@ -1,21 +1,22 @@
-# TP Actionneur_Automatique_Applique
+# 2324_ESE3745_DU_THIRUKUMARAN>
 
 ## OBJECTIF 
-L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur.<br> Ce TP se compose en 3 parties : <br>
+L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur. <br> 
+Ce TP se compose en 3 parties : <br>
 I. La commande de la MCC  <br>
 II. La commande en boucle ouverte et mesure du courant et de la vitesse <br>
 III. L'asservissement de ces derniers <br>
 
 ## I. La commande de la MCC 
-Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant certaines contraintes. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis et nous réalisons un premier essai de commande de moteur. 
+Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant certaines contraintes. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis nous réalisons un premier essai de commande de moteur. 
 
 ### 1. Génération de 4 signaux PWM 
 #### PWM complémentaires
-__Contraintes :__ <br>
-**Fréquence des PWM : 20kHz** <br> 
-**Rapport cyclique : 60%** <br>
-**Résolution de 10 bits** <br>
-**Temps morts** : [Temps morts](#temps-morts)
+Contraintes : <br>
+- Fréquence des PWM : **20kHz** <br> 
+- Rapport cyclique : **60%** <br>
+- Résolution de **10 bits** <br>
+- Temps morts : [Temps morts](#temps-morts)
 
 __Choix du timer 1 en mode :__ <br>
 - Channel 1 -> PWM Generation CH1 CH1N <br>
@@ -40,6 +41,7 @@ l'**ARR** est divisé par deux : **4250** <br>
 #### Visualisation des PWM complémentaires en décalage
 <img src="Image/PWMdecal.jpeg">
 La fréquence est bien de 1/(50*10^-6) = 20 kHz
+
 ### Temps morts
 Selon la datasheet du transistor, le Rise Time et le Fall Time sont à 35 ns, soient des temps morts à 70 ns. <br>
 Pour être large, nous prenons des temps morts à 200 ns.
@@ -149,9 +151,9 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 ### 3. Mesure de la vitesse 
 > Commande ```encoder``` réalisée durant les vacances, marchera t-elle ?  
 #
-Pour la vitesse, nous nous plaçons en mode encodeur <br>
+Pour la vitesse, nous nous plaçons en mode encodeur <br><br>
 __Choix du timer 4 en mode :__ <br>
-Combined Channel -> Encoder Mode <br>
+- Combined Channel -> Encoder Mode <br>
 
 Pour calculer la vitesse, nous faisons le choix d'activer l'interruption du timer 5 toutes les 10 ms.
 Nous récupérons la valeur du compteur de l'encodeur (timer 4), celui-ci est multiplié par 100 Hz (d'où les 10 ms) puis divisé par la résolution de l'encodeur : 4096 (12 bits).
@@ -169,3 +171,10 @@ void TIM5_IRQHandler(void)
   /* USER CODE END TIM5_IRQn 1 */
 }
 ```
+## III. L'asservissement
+Nous n'avons pas réalisé l'asservissement
+## Remarques
+Nous n'avons pas réalisé de Doxygen, nous n'avons pas spécialement écrit des fonctions, l'essentiel est dans la Shell_Loop. Il y a un callback et un appel d'interruption.
+## Auteurs
+Clément DU
+Laksan THIRUKUMARAN
