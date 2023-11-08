@@ -1,13 +1,10 @@
 # TP Actionneur_Automatique_Applique
 ## OBJECTIF 
-
 L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur.<br> Ce TP se compose en 3 parties : 
 I. La commande de la MCC  
 II. La commande en boucle ouverte et mesure du courant et de la vitesse <br>
 III. L'asservissement de ces derniers <br>
-
 ## I. La commande de la MCC 
-
 Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant certaines contraintes. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis et nous réalisons un premier essai de commande de moteur. 
 
 ### 1. Génération de 4 signaux PWM 
