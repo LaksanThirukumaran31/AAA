@@ -4,21 +4,21 @@
 
 # OBJECTIF 
 
-L'objectif de ce TP est de pouvoir réaliser l' asservissement en vitesse et en courant d'un moteur.<br> Ce TP est réparti en 3 parties : 
-I. La commande d'une MCC  
+L'objectif final du TP est de réaliser l' asservissement en vitesse et en courant d'un moteur.<br> Ce TP se compose en 3 parties : 
+I. La commande de la MCC  
 II. La commande en boucle ouverte et mesure du courant et de la vitesse <br>
 III. Asservissement <br>
 
-#  PARTIE 1 : Commande d'une MCC 
+#  PARTIE 1 : La commande de la MCC 
 
 # Génération de 4 PWM 
 
-Dans cette première partie, nous devions généré 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant le cahier des charges en incluant les temps mort. Ensuite nous devions visualiser et verifier les signaux sur un oscilloscope et réaliser un premier essai de commande de moteur. 
+Dans cette première partie, nous générons 4 PWM en complémentaire décalée pour contrôler en boucle ouverte le moteur en respectant le cahier des charges en incluant les temps mort. Nous visualisons et vérifions les signaux générés sur l'oscilloscope puis et nous réalisons un premier essai de commande de moteur. 
 
 # 1. Réglages des PWM**
 **PWM SIMPLE f=20kHz , alpha 60% , résolution de 10 bits**
 
-Les PWM que nous avons utilisé sont les PWM du timer 1 
+Les PWM que nous avons utilisés sont les PWM du timer 1 
 channel 1 -> 1°PWM,
 channel 2 -> 2°PWM
 channel 3 -> Compl1°PWM
