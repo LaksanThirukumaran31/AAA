@@ -31,7 +31,7 @@ Pour obtenir une fréquence de 20 kHz tout en respectant la résolution et le ra
 
 #### PWM complémentaires en décalage
 Pour obtenir les signaux PWM complémentaires en décalage, nous reconfigurons les réglages. <br> 
-- **Counteur Mode** : **Center Aligned**, par conséquent <br>
+- **```Counteur Mode```** : **Center Aligned**, par conséquent <br>
 l'**ARR** est divisé par deux : **4250** <br>
 - **CCR1** = **2550** <br>
 - **CCR2** = ARR-CCR1 = 4250-2550 = **1700** <br>
@@ -118,7 +118,7 @@ Ajout des commandes dans le fichier shell.c :
 ```
 
 ### 2. Mesure du courant 
-#### Conversion et mesure par pooling ```adc```
+#### Conversion et mesure par pooling 
 Nous mesurons le courant de U (U_Imes: pin PA1 -> ADC CHANNEL 1)
 Avec la datasheet du capteur du courant, son offset de 1.65V. 
 Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous convertissons la valeur de l'ADC pour ainsi obtenir la valeur du courant.
@@ -140,9 +140,10 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 			HAL_UART_Transmit(&huart2,(uint8_t*)adc,strlen(adc),HAL_MAX_DELAY);
 		}
 ```
-#### Conversion et mesure par DMA ```adc_dma```
-### 3. Mesure de la vitesse ```encoder```
-> Commande ```encoder``` réalisée durant les vacances, marchera t-elle ?  <br>
+#### Conversion et mesure par DMA 
+### 3. Mesure de la vitesse 
+> Commande ```encoder``` réalisée durant les vacances, marchera t-elle ?  
+#
 Pour la vitesse, nous nous plaçons en mode encodeur <br>
 __Choix du timer 4 en mode :__ <br>
 Combined Channel -> Encoder Mode <br>
