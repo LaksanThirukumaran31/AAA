@@ -76,7 +76,7 @@ else if(strcmp(argv[0],"speed")==0){
 Nous fixons le rapport cyclique à 0 ou à 100 :
 - 0, si le nombre est négatif
 - 100, si le nombre est supérieur à 100
-- 
+
 ### 3. Premiers tests
 Nous avons réalisé des tests pour vérifier le bon fonctionnement de la commande speed. 
 Nous varions la vitesse de 10% en 10% pour éviter les forts appels de courant.
@@ -88,7 +88,7 @@ Dans cette partie , on veut faire la commande en Bo du moteur avec une accélér
 Nous rajoutons d'autres commandes afin de contrôler la vitesse : 
 - Commande "start" : permet de fixer le rapport cyclique à 50% et activer les PWM
 - Commande "stop" : permet de désactiver les PWM
-- 
+  
 Ajout des commandes dans le fichier shell.c :
 
 ```c
@@ -139,7 +139,8 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 		}
 ```
 #### Conversion et mesure par DMA
-### 3. Mesure de la vitesse (réalisé durant les vacances, marchera t-il ?)
+### 3. Mesure de la vitesse (réalisé durant les vacances, marchera t-elle ?)
+![image](https://github.com/LaksanThirukumaran31/AAA/assets/145321104/ee5412f0-4007-492a-9b9f-c43e69470de6)
 Pour la vitesse, nous nous plaçons en mode encodeur
 __Choix du timer 4 en mode :__ <br>
 Combined Channel -> Encoder Mode <br>
