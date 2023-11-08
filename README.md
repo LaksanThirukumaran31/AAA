@@ -93,7 +93,7 @@ Nous varions la vitesse de 10% en 10% pour éviter les forts appels de courant.
 ## II. La commande en boucle ouverte et mesure du courant et de la vitesse
 Dans cette partie, nous réalisons la commande en boucle ouverte du moteur avec une accélération limitée, puis nous mesurons le courant U_Imes et la vitesse à partir des encodeurs du moteur. 
 
-### 1.Commande de la vitesse 
+### 1. Commande de la vitesse 
 Nous rajoutons d'autres commandes afin de contrôler la vitesse : 
 - Commande ```start``` : permet de fixer le rapport cyclique à 50% et activer les PWM
 - Commande ```stop``` : permet de désactiver les PWM
@@ -161,13 +161,12 @@ Nous réalisons  la  mesure du courant en utilisant le DMA. Pour cela, il y a pl
 4. Configurer une commande "adc_dma" sur le shell <br>
 
 Nous choisissons le mode "Update Envent" dans la partie Trigger Output du timer 1. Ce mode permet au timer de générer des déclenchements à intervalles réguliers. Nous utilisons ces déclenchements pour lancer la conversion. 
-
+#
 Pour l'ADC, dans la partie "ADC_Regular_ConversionMode", nous avons choisi le mode Timer 1 Trigger Out event pour "External Trigger Conversion Source". 
 Ce mode permet de lancer la conversion à chaque déclenchement du timer 1.  
+#
 Nous activons aussi l'interruption de l'ADC pour faire la conversion de la valeur en sortie de l'ADC. <br>
-Pour le DMA, nous fixons une requête DMA du chanel 2 de l'ADC vers la mémoire. 
-
-Puis nous réalisons la conversion dans le Callback  : "HAL_ADC_ConvCpltCallback"
+Pour le DMA, nous fixons une requête DMA du chanel 2 de l'ADC vers la mémoire puis nous réalisons la conversion dans le Callback  : "HAL_ADC_ConvCpltCallback"
 
 ```c
 
@@ -186,7 +185,7 @@ Puis nous réalisons la conversion dans le Callback  : "HAL_ADC_ConvCpltCallback
 	 */
 ```
 
-Commande ```adc_dma``` 
+Commande ```adc_dma``` du shell.c
 
 ```c
 else if(strcmp(argv[0],"adc_dma")==0){
