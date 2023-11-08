@@ -11,11 +11,11 @@ Dans cette première partie, nous générons 4 PWM en complémentaire décalée 
 
 ### 1. Génération de 4 signaux PWM 
 #### PWM complémentaires
-__Contraintes :__
+__Contraintes :__ <br>
 **Fréquence des PWM : 20kHz** <br> 
 **Rapport cyclique : 60%** <br>
 **Résolution de 10 bits**
-**Temps morts** : voir [Temps morts](#temps-morts)
+**Temps morts** : [Temps morts](#temps-morts)
 
 __Choix du timer 1 en mode :__ <br>
 - Channel 1 -> PWM Generation CH1 CH1N <br>
@@ -28,7 +28,7 @@ Pour obtenir une fréquence de 20 kHz tout en respectant la résolution et le ra
 - **CCR2** ou PWM CH2-CH2N Pulse : **4950** <br>
 
 #### Visualisation des PWM complémentaires
-
+<img src="Image/PWM.jpeg">
 #### PWM complémentaires en décalage
 Pour obtenir les signaux PWM complémentaires en décalage, nous reconfigurons les réglages. <br> 
 - **```Counteur Mode```** : **Center Aligned**, par conséquent <br>
@@ -37,7 +37,8 @@ l'**ARR** est divisé par deux : **4250** <br>
 - **CCR2** = ARR-CCR1 = 4250-2550 = **1700** <br>
 
 #### Visualisation des PWM complémentaires en décalage
-
+<img src="Image/PWMdecal.jpeg">
+La fréquence est bien de 1/(50*10^-6) = 20 kHz
 ### Temps morts
 Selon la datasheet du transistor, le Rise Time et le Fall Time sont à 35 ns, soient des temps morts à 70 ns. <br>
 Pour être large, nous prenons des temps morts à 200 ns.
@@ -51,7 +52,8 @@ nous n'avons pas besoin de tester les formules suivantes
 Nous rentrons la valeur 34 comme Dead Time dans la zone appropriée.
 
 #### Visualisation des temps morts
-
+<img src="Image/DeadTime.jpeg">
+Nous retrouvons bien les 200 ns.
 ### 2. Commande de la vitesse ```speed XX```
 Nous contrôlons la vitesse en envoyant une séquence via la liaison UART sous la forme : ```speed XX``` où ```XX``` est un nombre en pourcentage, par exemple ```speed 60``` correspond à un rapport cyclique de ```60%```. <br>
 Dans le fichier shell.c, nous rajoutons la commande "speed" :
@@ -84,7 +86,7 @@ Nous avons réalisé des tests pour vérifier le bon fonctionnement de la comman
 Nous varions la vitesse de 10% en 10% pour éviter les forts appels de courant.
 
 ## II. La commande en boucle ouverte et mesure du courant et de la vitesse
-Dans cette partie , on veut faire la commande en Bo du moteur avec une accélération limitée, puis faire la mesure du courant aux endroits adéquat dans le montage et de mesurer la vitesse à partir du codeurs présent sur chaque moteur. 
+Dans cette partie, nous réalisons la commande en boucle ouverte du moteur avec une accélération limitée, puis nous mesurons le courant U_Imes et la vitesse à partir des encodeurs du moteur. 
 
 ### 1.Commande de la vitesse 
 Nous rajoutons d'autres commandes afin de contrôler la vitesse : 
