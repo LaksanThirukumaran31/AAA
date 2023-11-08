@@ -29,6 +29,7 @@ Pour obtenir une fréquence de 20 kHz tout en respectant la résolution et le ra
 
 #### Visualisation des PWM complémentaires
 <img src="Image/PWM.jpeg">
+
 #### PWM complémentaires en décalage
 Pour obtenir les signaux PWM complémentaires en décalage, nous reconfigurons les réglages. <br> 
 - **```Counteur Mode```** : **Center Aligned**, par conséquent <br>
@@ -43,6 +44,7 @@ La fréquence est bien de 1/(50*10^-6) = 20 kHz
 Selon la datasheet du transistor, le Rise Time et le Fall Time sont à 35 ns, soient des temps morts à 70 ns. <br>
 Pour être large, nous prenons des temps morts à 200 ns.
 <img src="Image/DeadTime.png">
+
 ```
 DTF = 200 ns
 tDTS = 1/(170*10^6) = 5.88 ns
@@ -54,6 +56,7 @@ Nous rentrons la valeur 34 comme Dead Time dans la zone appropriée.
 #### Visualisation des temps morts
 <img src="Image/DeadTime.jpeg">
 Nous retrouvons bien les 200 ns.
+
 ### 2. Commande de la vitesse ```speed XX```
 Nous contrôlons la vitesse en envoyant une séquence via la liaison UART sous la forme : ```speed XX``` où ```XX``` est un nombre en pourcentage, par exemple ```speed 60``` correspond à un rapport cyclique de ```60%```. <br>
 Dans le fichier shell.c, nous rajoutons la commande "speed" :
