@@ -123,6 +123,7 @@ void Shell_Loop(void){
 			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
 			HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+			HAL_TIM_Base_Start_IT(&htim5);
 
 		}
 		else if(strcmp(argv[0],"stop")==0){
@@ -131,15 +132,12 @@ void Shell_Loop(void){
 			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
 			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
 		}
-		/*
-		 * Nouvelle commande shell "adc" qui permet de mesurer le courant en pooling
+		/* Par polling
+		 * Commande "adc" qui permet de mesurer le courant
 		 * valueADC est la valeur qu'on récupère de l'ADC
-		 * I_mes -> Variable qui correspond à la valeur du courant
-		 *
+		 * valueCurrent -> Variable qui correspond à la valeur du courant
 		 */
 		else if(strcmp(argv[0],"adc")==0){
-			// METHODE POOLING
-			// ADCP -> ADC POOLING
 			HAL_ADC_Start(&hadc1);
 			uint16_t valueADC;
 			valueADC= HAL_ADC_GetValue(&hadc1);
