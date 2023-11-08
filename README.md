@@ -45,7 +45,8 @@ Pour être large, nous prenons des temps morts à 200 ns.
 ```
 DTF = 200 ns
 tDTS = 1/(170*10^6) = 5.88 ns
-DTFG vaut environ 34 est inférieur à 2^7-1 = 127, donc c'est accepté, nous n'avons pas besoin de tester les suivantes
+DTFG vaut environ 34 est inférieur à 2^7-1 = 127, donc c'est accepté,
+nous n'avons pas besoin de tester les formules suivantes
 ```
 Nous rentrons la valeur 34 comme Dead Time dans la zone appropriée.
 
