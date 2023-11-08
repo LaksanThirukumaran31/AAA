@@ -16,7 +16,7 @@ Contraintes : <br>
 - Fréquence des PWM : **20kHz** <br> 
 - Rapport cyclique : **60%** <br>
 - Résolution de **10 bits** <br>
-- Temps morts : [Temps morts](#temps-morts)
+- Temps morts : [Temps morts](#ici)
 
 __Choix du timer 1 en mode :__ <br>
 - Channel 1 -> PWM Generation CH1 CH1N <br>
