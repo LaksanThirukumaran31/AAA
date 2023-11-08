@@ -1,4 +1,4 @@
-# 2324_ESE3745_DU_THIRUKUMARAN>
+# 2324_ESE3745_DU_THIRUKUMARAN
 
 ## OBJECTIF 
 L'objectif final du TP est de réaliser l'asservissement en vitesse et en courant d'un moteur. <br> 
