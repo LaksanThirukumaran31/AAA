@@ -141,7 +141,8 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 		}
 ```
 #### Conversion et mesure par DMA
-### 3. Mesure de la vitesse > réalisé durant les vacances, marchera t-elle ? Commande ```encoder```
+### 3. Mesure de la vitesse 
+> réalisé durant les vacances, marchera t-elle ? Commande ```encoder```
 Pour la vitesse, nous nous plaçons en mode encodeur
 __Choix du timer 4 en mode :__ <br>
 Combined Channel -> Encoder Mode <br>
