@@ -52,8 +52,8 @@ Nous rentrons la valeur 34 comme Dead Time dans la zone appropriée.
 
 #### Visualisation des temps morts
 
-### 2. Commande de la vitesse 
-Nous contrôlons la vitesse en envoyant une séquence via la liaison UART de la forme : speed XX où XX est un nombre en pourcentage, par exemple speed 60 correspond à un rapport cyclique de 60%. <br>
+### 2. Commande de la vitesse ```speed XX```
+Nous contrôlons la vitesse en envoyant une séquence via la liaison UART sous la forme : ```speed XX``` où ```XX``` est un nombre en pourcentage, par exemple ```speed 60``` correspond à un rapport cyclique de ```60%```. <br>
 Dans le fichier shell.c, nous rajoutons la commande "speed" :
 ```c
 #define PWM_MAX 100
@@ -118,7 +118,7 @@ Ajout des commandes dans le fichier shell.c :
 ```
 
 ### 2. Mesure du courant 
-#### Conversion et mesure par pooling
+#### Conversion et mesure par pooling ```adc```
 Nous mesurons le courant de U (U_Imes: pin PA1 -> ADC CHANNEL 1)
 Avec la datasheet du capteur du courant, son offset de 1.65V. 
 Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous convertissons la valeur de l'ADC pour ainsi obtenir la valeur du courant.
@@ -140,10 +140,10 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 			HAL_UART_Transmit(&huart2,(uint8_t*)adc,strlen(adc),HAL_MAX_DELAY);
 		}
 ```
-#### Conversion et mesure par DMA
-### 3. Mesure de la vitesse 
-> réalisé durant les vacances, marchera t-elle ? Commande ```encoder```
-Pour la vitesse, nous nous plaçons en mode encodeur
+#### Conversion et mesure par DMA ```adc_dma```
+### 3. Mesure de la vitesse ```encoder```
+> Commande ```encoder``` réalisée durant les vacances, marchera t-elle ?  <br>
+Pour la vitesse, nous nous plaçons en mode encodeur <br>
 __Choix du timer 4 en mode :__ <br>
 Combined Channel -> Encoder Mode <br>
 
