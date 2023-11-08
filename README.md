@@ -154,16 +154,18 @@ Nous faisons la conversion suivante pour avoir la valeur du courant et puis nous
 ```
 #### Conversion et mesure par DMA 
 
-Nous réalisons  la  mesure du courant en utilisant le DMA. Pour cela il il y a plusieurs configuration à faire : <br>
+Nous réalisons  la  mesure du courant en utilisant le DMA. Pour cela, il y a plusieurs configuration à faire : <br>
 1. Configurer le timer  <br>
 2. Configuer l'ADC  et du DMA<br>
 3. Coder la conversion dans le callback de l'ADC <br>
 4. Configurer une commande "adc_dma" sur le shell <br>
 
-Nous avons choisit le mode "Update Envent" dans la partie Trigger Output du timer 1. Ce mode permet au timer de générer des déclenchements à intervalles réguliers. Nous utilisons ses déclenchements pour lancer la conversion. 
+Nous choisissons le mode "Update Envent" dans la partie Trigger Output du timer 1. Ce mode permet au timer de générer des déclenchements à intervalles réguliers. Nous utilisons ces déclenchements pour lancer la conversion. 
 
-Pour l'ADC, Dans la partie "ADC_Regular_ConversionMode", nous avons choisit le mode Timer 1 Trigger Out event pour " External Trigger Conversion Source". Ce mode permet de lancer la conversion à chaque déclenchement du timer 1.  Nous activons  aussi l'interruption de l'ADC pour faire la conversion de la valeur en sorite de l'ADC. <br>
-Pour le DMA, nous avons fixer une requête DMA du chanel 2 de l'ADC vers la mémoire. 
+Pour l'ADC, dans la partie "ADC_Regular_ConversionMode", nous avons choisi le mode Timer 1 Trigger Out event pour "External Trigger Conversion Source". 
+Ce mode permet de lancer la conversion à chaque déclenchement du timer 1.  
+Nous activons aussi l'interruption de l'ADC pour faire la conversion de la valeur en sortie de l'ADC. <br>
+Pour le DMA, nous fixons une requête DMA du chanel 2 de l'ADC vers la mémoire. 
 
 Puis nous réalisons la conversion dans le Callback  : "HAL_ADC_ConvCpltCallback"
 
@@ -182,9 +184,9 @@ Puis nous réalisons la conversion dans le Callback  : "HAL_ADC_ConvCpltCallback
 	 * 4096 -> 12 bits de résolution pour l'ADC
 	 * Imesf -> La varibale qui contient le courant pour la methode ADC/TIM/DMA
 	 */
+```
 
-
-Pour utiliser la conversion en utilisant le dma, nous avons configuré une commande "adc_dma": 
+Commande ```adc_dma``` 
 
 ```c
 else if(strcmp(argv[0],"adc_dma")==0){
